@@ -34,8 +34,9 @@
 				opt = [];
 			}
 		
+            var startYear = !isNaN(parseInt(opt.startYear)) ? parseInt(opt.startYear) : new Date().getFullYear(),
 			this.options = {
-				startYear: !isNaN(parseInt(opt.startYear)) ? parseInt(opt.startYear) : new Date().getFullYear(),
+				startYear: startYear,
 				minDate: opt.minDate instanceof Date ? opt.minDate : null,
 				maxDate: opt.maxDate instanceof Date ? opt.maxDate : null,
 				language: (opt.language != null && dates[opt.language] != null) ? opt.language : 'en',
@@ -55,7 +56,22 @@
 				contextMenuItems: opt.contextMenuItems instanceof Array ? opt.contextMenuItems : [],
 				customDayRenderer : $.isFunction(opt.customDayRenderer) ? opt.customDayRenderer : null,
 				customDataSourceRenderer : $.isFunction(opt.customDataSourceRenderer) ? opt.customDataSourceRenderer : null,
-				weekStart: !isNaN(parseInt(opt.weekStart)) ? parseInt(opt.weekStart) : null
+				weekStart: !isNaN(parseInt(opt.weekStart)) ? parseInt(opt.weekStart) : null,
+                fiscalMap: opt.fiscalMap instanceof Object ? opt.fiscalMap :
+                    { 
+                        0: { month: 0, year: startYear}, 
+                        1: { month: 1, year: startYear}, 
+                        2: { month: 2, year: startYear}, 
+                        3: { month: 3, year: startYear}, 
+                        4: { month: 4, year: startYear}, 
+                        5: { month: 5, year: startYear}, 
+                        6: { month: 6, year: startYear}, 
+                        7: { month: 7, year: startYear}, 
+                        8: { month: 8, year: startYear}, 
+                        9: { month: 9, year: startYear}, 
+                        10: { month: 10, year: startYear}, 
+                        11: { month: 11, year: startYear}, 
+                    }
 			};
 			
 			this._initializeDatasourceColors();
@@ -187,9 +203,9 @@
 				/* Container */
 				var monthDiv = $(document.createElement('div'));
 				monthDiv.addClass('month-container');
-				monthDiv.data('month-id', m);
+				monthDiv.data('month-id', this.options.fiscalMap[m].month);
 				
-				var firstDate = new Date(this.options.startYear, m, 1);
+				var firstDate = new Date(this.options.fiscalMap[m].year, this.options.fiscalMap[m].month, 1);
 				
 				var table = $(document.createElement('table'));
 				table.addClass('month');
@@ -202,7 +218,7 @@
 				var titleCell = $(document.createElement('th'));
 				titleCell.addClass('month-title');
 				titleCell.attr('colspan', this.options.displayWeekNumber ? 8 : 7);
-				titleCell.text(dates[this.options.language].months[m]);
+				titleCell.text(dates[this.options.language].months[this.options.fiscalMap[m].month]);
 				
 				titleRow.append(titleCell);
 				thead.append(titleRow);
@@ -241,7 +257,7 @@
 				
 				/* Days */
 				var currentDate = new Date(firstDate.getTime());
-				var lastDate = new Date(this.options.startYear, m + 1, 0);
+				var lastDate = new Date(this.options.fiscalMap[m].year, this.options.fiscalMap[m].month + 1, 0);
 				
 				while(currentDate.getDay() != weekStart)
 				{

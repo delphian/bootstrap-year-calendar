@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Paul-DS/bootstrap-year-calendar.git"
+    "url": "git+https://github.com/delphian/bootstrap-year-calendar.git"
   },
   "keywords": [
     "calendar",
@@ -17,7 +17,7 @@
   "author": "Paul-DS",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/Paul-DS/bootstrap-year-calendar/issues"
+    "url": "https://github.com/delphian/bootstrap-year-calendar/issues"
   },
   "homepage": "http://www.bootstrap-year-calendar.com/",
   "dependencies": {
