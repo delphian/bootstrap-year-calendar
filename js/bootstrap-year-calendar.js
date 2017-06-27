@@ -34,7 +34,7 @@
 				opt = [];
 			}
 		
-            var startYear = !isNaN(parseInt(opt.startYear)) ? parseInt(opt.startYear) : new Date().getFullYear(),
+            var startYear = !isNaN(parseInt(opt.startYear)) ? parseInt(opt.startYear) : new Date().getFullYear();
 			this.options = {
 				startYear: startYear,
 				minDate: opt.minDate instanceof Date ? opt.minDate : null,
@@ -59,18 +59,18 @@
 				weekStart: !isNaN(parseInt(opt.weekStart)) ? parseInt(opt.weekStart) : null,
                 fiscalMap: opt.fiscalMap instanceof Object ? opt.fiscalMap :
                     { 
-                        0: { month: 0, year: startYear}, 
-                        1: { month: 1, year: startYear}, 
-                        2: { month: 2, year: startYear}, 
-                        3: { month: 3, year: startYear}, 
-                        4: { month: 4, year: startYear}, 
-                        5: { month: 5, year: startYear}, 
-                        6: { month: 6, year: startYear}, 
-                        7: { month: 7, year: startYear}, 
-                        8: { month: 8, year: startYear}, 
-                        9: { month: 9, year: startYear}, 
-                        10: { month: 10, year: startYear}, 
-                        11: { month: 11, year: startYear}, 
+                        0: { month: 0, year: 0}, 
+                        1: { month: 1, year: 0}, 
+                        2: { month: 2, year: 0}, 
+                        3: { month: 3, year: 0}, 
+                        4: { month: 4, year: 0}, 
+                        5: { month: 5, year: 0}, 
+                        6: { month: 6, year: 0}, 
+                        7: { month: 7, year: 0}, 
+                        8: { month: 8, year: 0}, 
+                        9: { month: 9, year: 0}, 
+                        10: { month: 10, year: 0}, 
+                        11: { month: 11, year: 0}
                     }
 			};
 			
@@ -133,7 +133,7 @@
 			
 			var prev2YearDiv = $(document.createElement('th'));
 			prev2YearDiv.addClass('year-title year-neighbor2 hidden-sm hidden-xs');
-			prev2YearDiv.text(this.options.startYear - 2);
+			prev2YearDiv.text((this.options.fiscalMap[0].month == 0) ? this.options.startYear - 2 : (this.options.startYear - 2) + "-" + (this.options.startYear - 1));
 			
 			if(this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 2, 11, 31)) {
 				prev2YearDiv.addClass('disabled');
@@ -143,7 +143,7 @@
 			
 			var prevYearDiv = $(document.createElement('th'));
 			prevYearDiv.addClass('year-title year-neighbor hidden-xs');
-			prevYearDiv.text(this.options.startYear - 1);
+            prevYearDiv.text((this.options.fiscalMap[0].month == 0) ? this.options.startYear - 1 : (this.options.startYear - 1) + "-" + this.options.startYear);
 			
 			if(this.options.minDate != null && this.options.minDate > new Date(this.options.startYear - 1, 11, 31)) {
 				prevYearDiv.addClass('disabled');
@@ -153,13 +153,13 @@
 			
 			var yearDiv = $(document.createElement('th'));
 			yearDiv.addClass('year-title');
-			yearDiv.text(this.options.startYear);
+			yearDiv.text((this.options.fiscalMap[0].month == 0) ? this.options.startYear : this.options.startYear + "-" + (this.options.startYear + 1));
 			
 			headerTable.append(yearDiv);
 			
 			var nextYearDiv = $(document.createElement('th'));
 			nextYearDiv.addClass('year-title year-neighbor hidden-xs');
-			nextYearDiv.text(this.options.startYear + 1);
+			nextYearDiv.text((this.options.fiscalMap[0].month == 0) ? this.options.startYear + 1 : (this.options.startYear + 1) + "-" + (this.options.startYear + 2));
 			
 			if(this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 1, 0, 1)) {
 				nextYearDiv.addClass('disabled');
@@ -169,7 +169,7 @@
 			
 			var next2YearDiv = $(document.createElement('th'));
 			next2YearDiv.addClass('year-title year-neighbor2 hidden-sm hidden-xs');
-			next2YearDiv.text(this.options.startYear + 2);
+			next2YearDiv.text((this.options.fiscalMap[0].month == 0) ? this.options.startYear + 2 : (this.options.startYear + 2) + "-" + (this.options.startYear + 3));
 			
 			if(this.options.maxDate != null && this.options.maxDate < new Date(this.options.startYear + 2, 0, 1)) {
 				next2YearDiv.addClass('disabled');
@@ -205,7 +205,7 @@
 				monthDiv.addClass('month-container');
 				monthDiv.data('month-id', this.options.fiscalMap[m].month);
 				
-				var firstDate = new Date(this.options.fiscalMap[m].year, this.options.fiscalMap[m].month, 1);
+				var firstDate = new Date(this.options.startYear + this.options.fiscalMap[m].year, this.options.fiscalMap[m].month, 1);
 				
 				var table = $(document.createElement('table'));
 				table.addClass('month');
@@ -257,7 +257,7 @@
 				
 				/* Days */
 				var currentDate = new Date(firstDate.getTime());
-				var lastDate = new Date(this.options.fiscalMap[m].year, this.options.fiscalMap[m].month + 1, 0);
+				var lastDate = new Date(this.options.startYear + this.options.fiscalMap[m].year, this.options.fiscalMap[m].month + 1, 0);
 				
 				while(currentDate.getDay() != weekStart)
 				{
